@@ -17,7 +17,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     .get(`https://jsonplaceholder.typicode.com/photos`)
     .then((res) => res.data)) as APhoto[];
 
-  const paths = photos.map((item) => ({
+  const paths = photos.slice(0, 100).map((item) => ({
     params: { id: item?.id?.toString() ?? '0' },
   }));
 
