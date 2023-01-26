@@ -21,6 +21,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
     params: { id: item?.id?.toString() ?? '0' },
   }));
 
+  console.log(paths);
+
   return {
     paths,
     fallback: 'blocking',
