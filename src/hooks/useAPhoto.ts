@@ -3,7 +3,7 @@ import axios from 'axios';
 
 type KeyType = (string | undefined)[];
 
-interface APost {
+export interface APhoto {
   albumId: number;
   id: number;
   title: string;
@@ -11,7 +11,7 @@ interface APost {
   thumbnailUrl: string;
 }
 
-const fetcher: Fetcher<APost, KeyType> = async ([url, photoId]) => {
+const fetcher: Fetcher<APhoto, KeyType> = async ([url, photoId]) => {
   return axios.get(`${url}/${photoId}`).then((res) => res.data);
 };
 

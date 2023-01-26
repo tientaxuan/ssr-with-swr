@@ -1,13 +1,33 @@
 import React from 'react';
 import { SWRConfig, unstable_serialize } from 'swr';
 import useAPhoto from '@/hooks/useAPhoto';
-import type { InferGetServerSidePropsType, GetServerSideProps } from 'next';
+import type {
+  InferGetStaticPropsType,
+  GetStaticProps,
+  GetStaticPaths,
+} from 'next';
 import axios from 'axios';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import type { APhoto } from '@/hooks/useAPhoto';
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getStaticPaths: GetStaticPaths = async () => {
+  const photos = (await axios
+    .get(`https://jsonplaceholder.typicode.com/photos`)
+    .then((res) => res.data)) as APhoto[];
+
+  const paths = photos.map((item) => ({
+    params: { id: item?.id?.toString() ?? '0' },
+  }));
+
+  return {
+    paths,
+    fallback: 'blocking',
+  };
+};
+
+export const getStaticProps: GetStaticProps = async (context) => {
   try {
     const id = context?.params?.id;
     const data = await axios
@@ -31,9 +51,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 };
 
-const SSRWithSWR = (
-  props: InferGetServerSidePropsType<typeof getServerSideProps>,
-) => {
+const SSRWithSWR = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const fallback = props.fallback;
   return (
     <SWRConfig value={{ fallback }}>
