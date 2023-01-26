@@ -9,9 +9,9 @@ import { useRouter } from 'next/router';
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const id = context?.params?.id;
-    const data = await axios.get(
-      `https://jsonplaceholder.typicode.com/posts/${id}`,
-    );
+    const data = await axios
+      .get(`https://jsonplaceholder.typicode.com/posts/${id}`)
+      .then((res) => res.data);
 
     return {
       props: {
